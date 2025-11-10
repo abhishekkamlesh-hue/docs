@@ -37,8 +37,7 @@
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "authentication"
+        "introduction"
       ]
     },
     {
