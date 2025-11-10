@@ -1,0 +1,189 @@
+---
+title: "Update campaign metadata (redial configuration)"
+description: "PUT /updateCampaignData/:campaignId - Update redial configuration for a campaign."
+slug: "/updateCampaignData/:campaignId"
+---
+
+# PUT /updateCampaignData/:campaignId
+
+Update campaign metadata (redial configuration) for a campaign.
+
+**Base URL**
+- `http://localhost:4000`
+
+**Endpoint**
+- **Method:** `PUT`
+- **URL:** `/updateCampaignData/:campaignId`
+- **Content-Type:** `application/json`
+- **Auth:** (depends on server) — possible `401` / `403` responses documented below
+
+## Description
+
+Updates an existing campaign record in the database using the provided `campaignId`.  
+The API uses `Campaigns.findOneAndUpdate` internally, so it updates only fields passed in the request body and returns the updated document.
+
+## Request body (example)
+
+```json
+{
+  "redialConfig": {
+    "enabled": true,
+    "callEntities": [
+      { "match": { "PTP": "xyx" }, "intervalMinutes": 10, "maxAttempts": 2 }
+    ],
+    "callStatus": [
+      { "match": "busy", "intervalMinutes": 10, "maxAttempts": 2 },
+      { "match": "Failed", "intervalMinutes": 10, "maxAttempts": 2 }
+    ],
+    "terminalConditions": ["connected", { "PTP": "xyx" }]
+  }
+}
+```
+
+## Example request (curl)
+
+```bash
+curl --location --request PUT 'http://localhost:4000/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53' --header 'Content-Type: application/json' --data '{
+  "redialConfig": {
+    "enabled": true,
+    "callStatus": [
+      { "match": "busy", "intervalMinutes": 10, "maxAttempts": 2 }
+    ]
+  }
+}'
+```
+
+---
+
+## Responses
+
+### 200 OK ✅
+
+**Condition:** Campaign found and successfully updated.  
+**Returned from:**
+```js
+sendResponse(res, 200, updated, "Campaign updated successfully.");
+```
+
+**Example**
+```json
+{
+    "status": "success",
+    "data": {
+        "_id": "690ddba53bf1240f6514ee8d",
+        "campaignName": "test_camp_v2",
+        "campaignId": "0fff1da6-ace9-4811-9ed6-1d8aba00bc53",
+        "status": "not-yet-started",
+        "currProcessingCallCount": 0,
+        "currDialingCallCount": 0,
+        "isDeleted": false,
+        "campaignStartTime": {
+            "timeZone": "Asia/Calcutta",
+            "hour": 8,
+            "minute": 0
+        },
+        "campaignEndTime": {
+            "timeZone": "Asia/Calcutta",
+            "hour": 20,
+            "minute": 0
+        },
+        "isHidden": false,
+        "agentId": "68ee18dd3d4f6ad02510bca5",
+        "isScheduledCall": false,
+        "isContextBasedCall": false,
+        "recentCallContextCount": 3,
+        "redialConfig": {
+            "enabled": true,
+            "callEntities": [
+                {
+                    "match": {
+                        "PTP": "xyx"
+                    },
+                    "intervalMinutes": 10,
+                    "maxAttempts": 2,
+                    "_id": "69119a59c7352d30be2f2d3a"
+                }
+            ],
+            "callStatus": [
+                {
+                    "match": "busy",
+                    "intervalMinutes": 10,
+                    "maxAttempts": 2,
+                    "_id": "69119a59c7352d30be2f2d38"
+                },
+                {
+                    "match": "Failed",
+                    "intervalMinutes": 10,
+                    "maxAttempts": 2,
+                    "_id": "69119a59c7352d30be2f2d39"
+                }
+            ],
+            "terminalConditions": [
+                "connected",
+                {
+                    "PTP": "xyx"
+                }
+            ]
+        },
+        "createdAt": "2025-11-07T11:44:37.129Z",
+        "updatedAt": "2025-11-10T07:55:05.674Z",
+        "__v": 0
+    },
+    "message": "Campaign updated successfully."
+}
+```
+
+---
+
+### 404 Not Found ⚠️
+
+**Condition:** No campaign exists for the provided `campaignId`.  
+**Returned from:**
+```js
+if (!updated) return sendResponse(res, 404, {}, "Campaign not found.");
+```
+
+**Example**
+```json
+{
+  "status": "error",
+  "message": "Campaign not found.",
+  "data": {}
+}
+```
+
+---
+
+### 500 Internal Server Error ❌
+
+**Condition:** Any unhandled exception or database error during update.  
+**Returned from:**
+```js
+sendResponse(res, 500, {}, "Failed to update campaign data");
+```
+
+**Example**
+```json
+{
+  "status": "error",
+  "message": "Failed to update campaign data",
+  "data": {}
+}
+```
+
+---
+
+## Notes and behavior
+
+- The API uses `findOneAndUpdate` with `{ new: true, lean: true }`, so it returns the updated campaign document directly.
+- Fields not provided in the request body remain unchanged.
+- If the campaign doesn’t exist, no new document is created.
+- Errors are logged with a scope of `'updateCampaignData'` via `handleVoiceBotError`.
+
+---
+
+## Best practices
+
+- Validate `campaignId` (UUID or string) before making the call.
+- Send only the fields that need to be updated.
+- Use appropriate error handling on client side based on `status` and `message`.
