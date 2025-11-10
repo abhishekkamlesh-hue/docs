@@ -204,7 +204,7 @@ Update campaign metadata, specifically redial configuration settings for an exis
 
 <CodeGroup>
 ```bash cURL
-curl -X PUT "http://127.0.0.1/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53" \
+curl -X PUT "https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53" \
   -H "Content-Type: application/json" \
   -d '{
     "redialConfig": {
@@ -239,7 +239,7 @@ const axios = require('axios');
 async function updateCampaignData(campaignId, redialConfig) {
   try {
     const response = await axios.put(
-      `http://127.0.0.1/updateCampaignData/${campaignId}`,
+      `https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/${campaignId}`,
       {
         redialConfig: redialConfig
       },
@@ -297,7 +297,7 @@ def update_campaign_data(campaign_id, redial_config):
     Returns:
         dict: Updated campaign data
     """
-    url = f"http://127.0.0.1/updateCampaignData/{campaign_id}"
+    url = f"https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/{campaign_id}"
     
     payload = {
         "redialConfig": redial_config
@@ -358,7 +358,7 @@ except Exception as e:
 <?php
 
 function updateCampaignData($campaignId, $redialConfig) {
-    $url = "http://127.0.0.1/updateCampaignData/" . $campaignId;
+    $url = "https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/" . $campaignId;
     
     $payload = [
         'redialConfig' => $redialConfig

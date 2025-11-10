@@ -15,7 +15,7 @@
     }
   },
   "api": {
-    "baseUrl": "http://127.0.0.1:4000",
+    "baseUrl": "https://unabject-nonhereditably-gayla.ngrok-free.dev",
     "auth": {
       "method": "bearer"
     },
@@ -46,9 +46,9 @@
       "pages": [
        
         {
-          "group": "Third-Party Integration",
+          "group": "Campaigns",
           "pages": [
-            "api-reference/third-party/update-campaign-data"
+            "api-reference/campaigns/update-campaign-data"
           ]
         }
       ]
