@@ -1,0 +1,548 @@
+---
+title: "Update Campaign Data"
+api: "PUT /updateCampaignData/{campaignId}"
+description: "Update campaign metadata and redial configuration for an existing campaign"
+---
+
+## Overview
+
+Update campaign metadata, specifically redial configuration settings for an existing campaign. This endpoint allows you to modify campaign behavior for automatic redialing based on call outcomes and conditions.
+
+<Note>
+  **Campaign Management:** This endpoint only updates existing campaigns. Use campaign creation endpoints to create new campaigns.
+</Note>
+
+---
+
+## Path Parameters
+
+<ParamField path="campaignId" type="string" required>
+  **Campaign ID** - Unique identifier for the campaign to update
+  
+  **Format:** UUID string
+  
+  **Example:** `0fff1da6-ace9-4811-9ed6-1d8aba00bc53`
+</ParamField>
+
+---
+
+## Request Body
+
+<ParamField body="redialConfig" type="object" required>
+  **Redial Configuration** - Settings for automatic call redialing
+  
+  <Expandable title="Redial Config Properties">
+    <ParamField body="redialConfig.enabled" type="boolean" required>
+      Enable or disable automatic redialing for this campaign
+    </ParamField>
+    
+    <ParamField body="redialConfig.callEntities" type="array" optional>
+      Array of entity-based redial rules
+      
+      **Properties:**
+      - `match` (object) - Conditions to match for redialing
+      - `intervalMinutes` (number) - Minutes to wait before redialing
+      - `maxAttempts` (number) - Maximum redial attempts
+    </ParamField>
+    
+    <ParamField body="redialConfig.callStatus" type="array" optional>
+      Array of status-based redial rules
+      
+      **Properties:**
+      - `match` (string) - Call status to match (e.g., "busy", "failed")
+      - `intervalMinutes` (number) - Minutes to wait before redialing  
+      - `maxAttempts` (number) - Maximum redial attempts
+    </ParamField>
+    
+    <ParamField body="redialConfig.terminalConditions" type="array" optional>
+      Conditions that stop redialing when met
+      
+      **Examples:** `["connected", {"PTP": "xyz"}]`
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+---
+
+## Request Example
+
+<RequestExample>
+```json
+{
+  "redialConfig": {
+    "enabled": true,
+    "callEntities": [
+      {
+        "match": {
+          "PTP": "xyz"
+        },
+        "intervalMinutes": 10,
+        "maxAttempts": 2
+      }
+    ],
+    "callStatus": [
+      {
+        "match": "busy",
+        "intervalMinutes": 10,
+        "maxAttempts": 2
+      },
+      {
+        "match": "failed",
+        "intervalMinutes": 15,
+        "maxAttempts": 3
+      }
+    ],
+    "terminalConditions": [
+      "connected",
+      {
+        "PTP": "xyz"
+      }
+    ]
+  }
+}
+```
+</RequestExample>
+
+---
+
+## Response Format
+
+<Tabs>
+  <Tab title="✅ Success (200 OK)">
+    ```json
+    {
+      "status": "success",
+      "data": {
+        "_id": "690ddba53bf1240f6514ee8d",
+        "campaignName": "test_camp_v2",
+        "campaignId": "0fff1da6-ace9-4811-9ed6-1d8aba00bc53",
+        "status": "not-yet-started",
+        "currProcessingCallCount": 0,
+        "currDialingCallCount": 0,
+        "isDeleted": false,
+        "campaignStartTime": {
+          "timeZone": "Asia/Calcutta",
+          "hour": 8,
+          "minute": 0
+        },
+        "campaignEndTime": {
+          "timeZone": "Asia/Calcutta",
+          "hour": 20,
+          "minute": 0
+        },
+        "isHidden": false,
+        "agentId": "68ee18dd3d4f6ad02510bca5",
+        "isScheduledCall": false,
+        "isContextBasedCall": false,
+        "recentCallContextCount": 3,
+        "redialConfig": {
+          "enabled": true,
+          "callEntities": [
+            {
+              "match": {
+                "PTP": "xyz"
+              },
+              "intervalMinutes": 10,
+              "maxAttempts": 2,
+              "_id": "69119a59c7352d30be2f2d3a"
+            }
+          ],
+          "callStatus": [
+            {
+              "match": "busy",
+              "intervalMinutes": 10,
+              "maxAttempts": 2,
+              "_id": "69119a59c7352d30be2f2d38"
+            },
+            {
+              "match": "failed",
+              "intervalMinutes": 15,
+              "maxAttempts": 3,
+              "_id": "69119a59c7352d30be2f2d39"
+            }
+          ],
+          "terminalConditions": [
+            "connected",
+            {
+              "PTP": "xyz"
+            }
+          ]
+        },
+        "createdAt": "2025-11-07T11:44:37.129Z",
+        "updatedAt": "2025-11-10T07:55:05.674Z",
+        "__v": 0
+      },
+      "message": "Campaign updated successfully."
+    }
+    ```
+  </Tab>
+
+  <Tab title="❌ Not Found (404)">
+    ```json
+    {
+      "status": "error",
+      "message": "Campaign not found.",
+      "data": {}
+    }
+    ```
+  </Tab>
+
+  <Tab title="🚫 Server Error (500)">
+    ```json
+    {
+      "status": "error",
+      "message": "Failed to update campaign data",
+      "data": {}
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Implementation Examples
+
+<CodeGroup>
+```bash cURL
+curl -X PUT "http://127.0.0.1/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "redialConfig": {
+      "enabled": true,
+      "callStatus": [
+        {
+          "match": "busy",
+          "intervalMinutes": 10,
+          "maxAttempts": 2
+        },
+        {
+          "match": "failed",
+          "intervalMinutes": 15,
+          "maxAttempts": 3
+        }
+      ],
+      "terminalConditions": ["connected"]
+    }
+  }'
+
+# Expected Response:
+# {
+#   "status": "success",
+#   "message": "Campaign updated successfully.",
+#   "data": { ... updated campaign object ... }
+# }
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+async function updateCampaignData(campaignId, redialConfig) {
+  try {
+    const response = await axios.put(
+      `http://127.0.0.1/updateCampaignData/${campaignId}`,
+      {
+        redialConfig: redialConfig
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('✅ Campaign updated:', response.data.data.campaignId);
+    console.log('📊 Status:', response.data.data.status);
+    return response.data.data;
+
+  } catch (error) {
+    if (error.response?.status === 404) {
+      console.error('❌ Campaign not found');
+    } else {
+      console.error('❌ Update failed:', error.response?.data || error.message);
+    }
+    throw error;
+  }
+}
+
+// Usage Example
+const campaignId = '0fff1da6-ace9-4811-9ed6-1d8aba00bc53';
+const redialConfig = {
+  enabled: true,
+  callStatus: [
+    {
+      match: 'busy',
+      intervalMinutes: 10,
+      maxAttempts: 2
+    }
+  ]
+};
+
+updateCampaignData(campaignId, redialConfig)
+  .then(result => console.log('Campaign updated:', result))
+  .catch(error => console.error('Update failed:', error));
+```
+
+```python Python
+import requests
+import json
+
+def update_campaign_data(campaign_id, redial_config):
+    """
+    Update campaign redial configuration
+    
+    Args:
+        campaign_id (str): Campaign UUID
+        redial_config (dict): Redial configuration object
+        
+    Returns:
+        dict: Updated campaign data
+    """
+    url = f"http://127.0.0.1/updateCampaignData/{campaign_id}"
+    
+    payload = {
+        "redialConfig": redial_config
+    }
+    
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    
+    try:
+        response = requests.put(url, json=payload, headers=headers)
+        response.raise_for_status()
+        
+        result = response.json()
+        print(f"✅ Campaign updated: {result['data']['campaignId']}")
+        print(f"📊 Status: {result['data']['status']}")
+        
+        return result['data']
+        
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print("❌ Campaign not found")
+        else:
+            print(f"❌ HTTP Error: {e.response.status_code}")
+            print(f"Error Details: {e.response.json()}")
+        raise
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Request Error: {e}")
+        raise
+
+# Usage Example
+campaign_id = '0fff1da6-ace9-4811-9ed6-1d8aba00bc53'
+redial_config = {
+    'enabled': True,
+    'callStatus': [
+        {
+            'match': 'busy',
+            'intervalMinutes': 10,
+            'maxAttempts': 2
+        },
+        {
+            'match': 'failed', 
+            'intervalMinutes': 15,
+            'maxAttempts': 3
+        }
+    ],
+    'terminalConditions': ['connected']
+}
+
+try:
+    result = update_campaign_data(campaign_id, redial_config)
+    print("Campaign updated successfully:", result)
+except Exception as e:
+    print("Update failed:", e)
+```
+
+```php PHP
+<?php
+
+function updateCampaignData($campaignId, $redialConfig) {
+    $url = "http://127.0.0.1/updateCampaignData/" . $campaignId;
+    
+    $payload = [
+        'redialConfig' => $redialConfig
+    ];
+    
+    $headers = [
+        'Content-Type: application/json'
+    ];
+    
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_CUSTOMREQUEST => 'PUT',
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_HTTPHEADER => $headers,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30
+    ]);
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    if ($httpCode === 200) {
+        $result = json_decode($response, true);
+        echo "✅ Campaign updated: " . $result['data']['campaignId'] . "\n";
+        echo "📊 Status: " . $result['data']['status'] . "\n";
+        return $result['data'];
+    } else {
+        $error = json_decode($response, true);
+        if ($httpCode === 404) {
+            echo "❌ Campaign not found\n";
+        } else {
+            echo "❌ Error: " . $error['message'] . "\n";
+        }
+        throw new Exception("Campaign update failed");
+    }
+}
+
+// Usage Example
+$campaignId = '0fff1da6-ace9-4811-9ed6-1d8aba00bc53';
+$redialConfig = [
+    'enabled' => true,
+    'callStatus' => [
+        [
+            'match' => 'busy',
+            'intervalMinutes' => 10,
+            'maxAttempts' => 2
+        ]
+    ],
+    'terminalConditions' => ['connected']
+];
+
+try {
+    $result = updateCampaignData($campaignId, $redialConfig);
+    echo "Campaign updated successfully: " . json_encode($result) . "\n";
+} catch (Exception $e) {
+    echo "Update failed: " . $e->getMessage() . "\n";
+}
+?>
+```
+</CodeGroup>
+
+---
+
+## Response Fields
+
+<AccordionGroup>
+  <Accordion title="📊 Campaign Information" icon="chart-line">
+    **Core campaign details and status:**
+    
+    - **`_id`** - Internal database ID
+    - **`campaignId`** - Unique campaign identifier (UUID)
+    - **`campaignName`** - Human-readable campaign name
+    - **`status`** - Current campaign status (not-yet-started, running, paused, completed)
+    - **`isDeleted`** - Soft delete flag
+    - **`isHidden`** - Visibility flag for UI
+  </Accordion>
+
+  <Accordion title="⏰ Scheduling Configuration" icon="clock">
+    **Campaign timing and schedule settings:**
+    
+    - **`campaignStartTime`** - Daily start time with timezone
+    - **`campaignEndTime`** - Daily end time with timezone
+    - **`isScheduledCall`** - Whether calls are scheduled
+    - **`isContextBasedCall`** - Context-aware calling enabled
+  </Accordion>
+
+  <Accordion title="🔄 Redial Configuration" icon="redo">
+    **Automated redial behavior settings:**
+    
+    - **`enabled`** - Master switch for redialing
+    - **`callEntities`** - Entity-based redial rules
+    - **`callStatus`** - Status-based redial rules  
+    - **`terminalConditions`** - Conditions that stop redialing
+    - **`intervalMinutes`** - Wait time between redial attempts
+    - **`maxAttempts`** - Maximum retry attempts per rule
+  </Accordion>
+
+  <Accordion title="📈 Performance Metrics" icon="chart-bar">
+    **Real-time campaign performance data:**
+    
+    - **`currProcessingCallCount`** - Calls currently being processed
+    - **`currDialingCallCount`** - Calls currently being dialed
+    - **`recentCallContextCount`** - Recent calls for context analysis
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="🎯 Redial Strategy" icon="target">
+    **Optimize redial configuration for better results:**
+    
+    - **Use appropriate intervals:** Too frequent redialing may annoy customers
+    - **Set reasonable max attempts:** Limit to 2-3 attempts per status
+    - **Configure terminal conditions:** Prevent infinite redialing loops
+    - **Match specific statuses:** Use precise status matching (e.g., "busy" vs "failed")
+  </Accordion>
+
+  <Accordion title="⚡ Performance Tips" icon="bolt">
+    **Ensure optimal campaign performance:**
+    
+    - **Update incrementally:** Only send fields that need changes
+    - **Validate campaign ID:** Verify UUID format before API calls
+    - **Handle errors gracefully:** Implement proper error handling for 404/500 responses
+    - **Monitor campaign status:** Check if campaign is running before updates
+  </Accordion>
+
+  <Accordion title="🔧 Configuration Guidelines" icon="wrench">
+    **Configure redial settings effectively:**
+    
+    - **Busy lines:** Short intervals (5-10 minutes), limited attempts (2-3)
+    - **Failed calls:** Longer intervals (15-30 minutes), more attempts (3-5)
+    - **No answer:** Medium intervals (10-20 minutes), moderate attempts (2-4)
+    - **Connected calls:** Include in terminal conditions to stop redialing
+  </Accordion>
+
+  <Accordion title="🛡️ Error Prevention" icon="shield">
+    **Prevent common configuration mistakes:**
+    
+    - **Validate JSON structure:** Ensure proper redialConfig format
+    - **Check campaign existence:** Verify campaign ID exists before update
+    - **Avoid conflicting rules:** Ensure terminal conditions don't conflict with redial rules
+    - **Test configurations:** Use small test campaigns before applying to large campaigns
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Related API Endpoints
+
+<CardGroup cols={2}>
+  <Card 
+    title="Get Campaign Details" 
+    icon="eye" 
+    href="/api-reference/campaign/get-campaign"
+  >
+    Retrieve detailed information about a specific campaign including current redial configuration
+  </Card>
+  
+  <Card 
+    title="Get All Campaigns" 
+    icon="list" 
+    href="/api-reference/campaign/get-all-campaigns"
+  >
+    List all campaigns with their current status and configuration summary
+  </Card>
+  
+  <Card 
+    title="Start Campaign" 
+    icon="play" 
+    href="/api-reference/campaign/start-campaign"
+  >
+    Begin campaign execution with the configured redial settings
+  </Card>
+  
+  <Card 
+    title="Pause Campaign" 
+    icon="pause" 
+    href="/api-reference/campaign/pause-campaign"
+  >
+    Temporarily pause campaign execution while preserving redial configuration
+  </Card>
+</CardGroup>

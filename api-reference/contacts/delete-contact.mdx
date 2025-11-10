@@ -1,0 +1,59 @@
+---
+title: "Delete Contact"
+api: "GET /deleteContact/:contactId"
+description: "Permanently delete a contact from the system."
+---
+
+## Headers
+
+<ParamField header="Cookie" type="string" required>
+  Authentication token from login (httpOnly cookie)
+  
+  Example: `token=your_jwt_token_here`
+</ParamField>
+
+<ParamField header="Accept" type="string" default="application/json, text/plain, */*">
+  application/json, text/plain, */*
+</ParamField>
+
+<ParamField header="Origin" type="string">
+  Origin of the request (e.g., https://vb-seamless-dev-backend.oriserve.com/)
+</ParamField>
+
+<ParamField header="User-Agent" type="string">
+  Browser or client user agent
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="contactId" type="string" required>
+  The unique identifier of the contact to delete
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://vb-seamless-dev-backend.oriserve.com/deleteContact/{contactId}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "message": "Contact deleted successfully"
+}
+```
+
+```json 404 Not Found
+{
+  "success": false,
+  "message": "Contact not found",
+  "error": "NOT_FOUND"
+}
+```
+
+</ResponseExample>

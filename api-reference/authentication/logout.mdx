@@ -1,0 +1,94 @@
+---
+title: "Logout"
+api: "GET /logout"
+description: "Invalidate the current authentication token and end the user session."
+---
+
+## Headers
+
+<ParamField header="Cookie" type="string" required>
+  Your VoiceGenie API key/token to invalidate
+  
+  Example: `token=your_jwt_token_here`
+</ParamField>
+
+<ParamField header="Accept" type="string" default="application/json, text/plain, */*">
+  application/json, text/plain, */*
+</ParamField>
+
+<ParamField header="Origin" type="string">
+  Origin of the request (e.g., https://vb-seamless-dev-backend.oriserve.com/)
+</ParamField>
+
+<ParamField header="User-Agent" type="string">
+  Browser or client user agent
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if logout was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Logout confirmation message
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://vb-seamless-dev-backend.oriserve.com/logout'
+```
+
+```javascript JavaScript
+const options = {
+  method: 'GET',
+  credentials: 'include'
+};
+
+fetch('https://vb-seamless-dev-backend.oriserve.com/logout', options)
+  .then(response => response.json())
+  .then(data => {
+    // Clear stored token
+    localStorage.removeItem('apiKey');
+    console.log(data);
+  })
+  .catch(err => console.error(err));
+```
+
+```python Python
+import requests
+
+url = "https://vb-seamless-dev-backend.oriserve.com/logout"
+
+response = requests.get(url, cookies={'token': 'your_auth_token'})
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "message": "Logout successful"
+}
+```
+
+```json 401 Unauthorized
+{
+  "success": false,
+  "message": "Invalid or missing token",
+  "error": "UNAUTHORIZED"
+}
+```
+
+</ResponseExample>
+
+## Notes
+
+- After logout, the token cannot be reused
+- Client should clear stored tokens after successful logout
+- No need to logout expired tokens

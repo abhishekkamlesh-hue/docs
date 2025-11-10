@@ -1,0 +1,62 @@
+{
+  "name": "VoiceGenie Dialer API",
+  "logo": {
+    "dark": "/logo/dark.png",
+    "light": "/logo/light.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "api": {
+    "baseUrl": "http://127.0.0.1:4000",
+    "auth": {
+      "method": "bearer"
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@voicegenie.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://voicegenie.com"
+  },
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+       
+        {
+          "group": "Third-Party Integration",
+          "pages": [
+            "api-reference/third-party/update-campaign-data"
+          ]
+        }
+      ]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/voicegenie",
+    "github": "https://github.com/voicegenie",
+    "linkedin": "https://www.linkedin.com/company/voicegenie"
+  }
+}
