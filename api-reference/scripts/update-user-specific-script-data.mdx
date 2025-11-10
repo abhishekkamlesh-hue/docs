@@ -21,7 +21,7 @@ Modify user-specific script configurations without affecting the base script tem
 </ParamField>
 
 <ParamField header="Origin" type="string">
-  Origin of the request (e.g., https://vb-seamless-dev-backend.oriserve.com/)
+  Origin of the request (e.g., https://carwale-backend.oriserve.com/)
 </ParamField>
 
 <ParamField header="Content-Type" type="string" required>
@@ -167,7 +167,7 @@ const axios = require('axios');
 
 async function updateUserScriptData(scriptId, userId, customData) {
   const response = await axios.post(
-    'https://vb-seamless-dev-backend.oriserve.com/updateUserSpecificScriptData',
+    'https://carwale-backend.oriserve.com/updateUserSpecificScriptData',
     {
       script_id: scriptId,
       user_id: userId,

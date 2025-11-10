@@ -635,7 +635,7 @@ function processCallResults($callData) {
 
 <CodeGroup>
 ```bash cURL
-curl -X POST "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCall" \
+curl -X POST "https://carwale-backend.oriserve.com/initiateBatchCall" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -d '{
@@ -701,7 +701,7 @@ async function initiateBatchCall(
     }
 
     const response = await axios.post(
-      "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCall",
+      "https://carwale-backend.oriserve.com/initiateBatchCall",
       payload,
       {
         headers: {
@@ -788,7 +788,7 @@ def initiate_batch_call(campaign_id, users, notification_webhook_url=None):
         dict: Response with batch details and call statuses
     """
 
-    url = "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCall"
+    url = "https://carwale-backend.oriserve.com/initiateBatchCall"
 
     payload = {
         "campaignId": campaign_id,
@@ -859,7 +859,7 @@ result = initiate_batch_call(
 <?php
 
 function initiateBatchCall($campaignId, $users, $notificationWebhookUrl = null) {
-    $url = "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCall";
+    $url = "https://carwale-backend.oriserve.com/initiateBatchCall";
 
     $payload = [
         "campaignId" => $campaignId,

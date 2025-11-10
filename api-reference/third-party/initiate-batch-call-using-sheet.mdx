@@ -425,7 +425,7 @@ function processFileCallResults($callData) {
 
 ### cURL:
 ```bash
-curl -X POST "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCallUsingSheet" \
+curl -X POST "https://carwale-backend.oriserve.com/initiateBatchCallUsingSheet" \
   -F "campaignId=b885b212-d3bb-482f-a29d-508d2a8929ac" \
   -F "notificationWebhookUrl=https://overindulgently-unbreezy-colleen.ngrok-free.dev/getCallbackdata" \
   -F "file=@/path/to/contacts.csv"
@@ -450,7 +450,7 @@ async function initiateBatchCallUsingSheet(filePath, campaignId, notificationWeb
   }
   
   const response = await axios.post(
-    'https://vb-seamless-dev-backend.oriserve.com/initiateBatchCallUsingSheet',
+    'https://carwale-backend.oriserve.com/initiateBatchCallUsingSheet',
     form,
     {
       headers: form.getHeaders()
@@ -476,7 +476,7 @@ initiateBatchCallUsingSheet(
 import requests
 
 def initiate_batch_call_using_sheet(file_path, campaign_id, notification_webhook_url=None):
-    url = "https://vb-seamless-dev-backend.oriserve.com/initiateBatchCallUsingSheet"
+    url = "https://carwale-backend.oriserve.com/initiateBatchCallUsingSheet"
     
     # Required form data
     data = {

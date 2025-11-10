@@ -21,7 +21,7 @@ Get the knowledge base content that AI uses for context during conversations.
 </ParamField>
 
 <ParamField header="Origin" type="string">
-  Origin of the request (e.g., https://vb-seamless-dev-backend.oriserve.com/)
+  Origin of the request (e.g., https://carwale-backend.oriserve.com/)
 </ParamField>
 
 <ParamField header="User-Agent" type="string">
@@ -69,7 +69,7 @@ Get the knowledge base content that AI uses for context during conversations.
 
 ### cURL:
 ```bash
-curl -X GET "https://vb-seamless-dev-backend.oriserve.com/fetchKnowledgeBase" \
+curl -X GET "https://carwale-backend.oriserve.com/fetchKnowledgeBase" \
   -H "x-api-key: YOUR_API_KEY"
 ```
 
@@ -79,7 +79,7 @@ const axios = require('axios');
 
 async function fetchKnowledgeBase() {
   const response = await axios.get(
-    'https://vb-seamless-dev-backend.oriserve.com/fetchKnowledgeBase',
+    'https://carwale-backend.oriserve.com/fetchKnowledgeBase',
     {
       headers: { 'x-api-key': 'YOUR_API_KEY' }
     }
