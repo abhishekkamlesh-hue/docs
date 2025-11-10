@@ -214,7 +214,7 @@ Update campaign metadata, specifically redial configuration settings for an exis
 
 <CodeGroup>
 ```bash cURL
-curl -X PUT "https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53" \
+curl -X PUT "https://carwale-backend.oriserve.com/updateCampaignData/0fff1da6-ace9-4811-9ed6-1d8aba00bc53" \
   -H "Content-Type: application/json" \
   -d '{
     "redialConfig": {
@@ -249,7 +249,7 @@ const axios = require('axios');
 async function updateCampaignData(campaignId, redialConfig) {
   try {
     const response = await axios.put(
-      `https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/${campaignId}`,
+      `https://carwale-backend.oriserve.com/updateCampaignData/${campaignId}`,
       {
         redialConfig: redialConfig
       },
@@ -307,7 +307,7 @@ def update_campaign_data(campaign_id, redial_config):
     Returns:
         dict: Updated campaign data
     """
-    url = f"https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/{campaign_id}"
+    url = f"https://carwale-backend.oriserve.com/updateCampaignData/{campaign_id}"
     
     payload = {
         "redialConfig": redial_config
@@ -368,7 +368,7 @@ except Exception as e:
 <?php
 
 function updateCampaignData($campaignId, $redialConfig) {
-    $url = "https://unabject-nonhereditably-gayla.ngrok-free.dev/updateCampaignData/" . $campaignId;
+    $url = "https://carwale-backend.oriserve.com/updateCampaignData/" . $campaignId;
     
     $payload = [
         'redialConfig' => $redialConfig
@@ -520,39 +520,3 @@ try {
 </AccordionGroup>
 
 ---
-
-## Related API Endpoints
-
-<CardGroup cols={2}>
-  <Card 
-    title="Get Campaign Details" 
-    icon="eye" 
-    href="/api-reference/campaign/get-campaign"
-  >
-    Retrieve detailed information about a specific campaign including current redial configuration
-  </Card>
-  
-  <Card 
-    title="Get All Campaigns" 
-    icon="list" 
-    href="/api-reference/campaign/get-all-campaigns"
-  >
-    List all campaigns with their current status and configuration summary
-  </Card>
-  
-  <Card 
-    title="Start Campaign" 
-    icon="play" 
-    href="/api-reference/campaign/start-campaign"
-  >
-    Begin campaign execution with the configured redial settings
-  </Card>
-  
-  <Card 
-    title="Pause Campaign" 
-    icon="pause" 
-    href="/api-reference/campaign/pause-campaign"
-  >
-    Temporarily pause campaign execution while preserving redial configuration
-  </Card>
-</CardGroup>
